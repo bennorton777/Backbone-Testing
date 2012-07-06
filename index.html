@@ -6,7 +6,7 @@
 </head>
 <body>
 	<script id="title-tmpl" type="text/template">
-		<p><%= model.get('part1') %><%= model.get('part2') %></p>
+		<p><%= part1 %><%= part2 %></p>
 	</script>
 	<script>
 	$(document).ready(function(){
@@ -26,7 +26,7 @@
 						_.bindAll(this, 'render');
 				},
 				render: function(){
-						$(this.el).html(_.template(this.template, { model: this.model }));//'<span>'+this.model.get('part1')+' '+this.model.get('part2')+'</span>');
+						$(this.el).html(_.template(this.template, this.model.toJSON()));// { model: this.model }));//'<span>'+this.model.get('part1')+' '+this.model.get('part2')+'</span>');
 				return this;
 				}
 		});
