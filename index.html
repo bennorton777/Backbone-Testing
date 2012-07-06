@@ -8,17 +8,38 @@
 	<script id="title-tmpl" type="text/template">
 		<p><%= part1 %><%= part2 %></p>
 	</script>
+	<script id="value_tmpl" type="text/template">
+		<%= value %>
+	</script>
+	<script id="master_tmpl" type="text/template">
+		<div style="border-style:solid;border-width:1px">
+		<% _(items).each(function(item){ console.log(item.value);}) %>
+		</div>
+	</script>
 	<script>
 	$(document).ready(function(){
 		var Item=Backbone.Model.extend({
-			defaults: {
-				part1: "Hello, ",
-				part2: "world!"
-			}
+				defaults: {
+					items: [{value: 'Apple'}, {value: 'Jewel'}, {value: 'Something'}, {value: 'Nothing'}]
+				}
 		});
 		var List=Backbone.Collection.extend({
 			model: Item
 		});
+		window.thing=new Item();
+		window.template=$('#master_tmpl').html();
+		var MasterView=Backbone.View.extend({
+				el:('#titleDiv'),
+				initialize: function(){
+						_.bindAll(this, 'render');
+						this.render();
+				},
+				render: function(){
+						$(this.el).html(_.template(window.template, window.thing.toJSON()));
+						return this;
+				}
+		});
+		var master=new MasterView();
 		var ItemView=Backbone.View.extend({
 				tagName: 'li',
 				template: $('#title-tmpl').html(),
@@ -31,7 +52,7 @@
 				}
 		});
 		var ListView= Backbone.View.extend({
-			el: $('#titleDiv'),
+			//el: $('#titleDiv'),
 			events: {
 					'click button#add': 'addItem'
 			},
