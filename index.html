@@ -14,27 +14,30 @@
 	<script id="master_tmpl" type="text/template">
 		<div style="border-style:solid;border-width:1px">
 		<% _(items).each(function(item){ console.log(item);}) %>
-		<% window.grabFunc(items) %>
+		<%= window.grabFunc(items) %>
 		</div>
 	</script>
 	<script>
 	$(document).ready(function(){
 		var Item=Backbone.Model.extend({
 				defaults: {
-					items: ['Apple', 'Jewel', 'Something','Nothing']
+					items: ['Apple','Jewel','Something','Nothing']
 				}
 		});
 		var List=Backbone.Collection.extend({
 			model: Item
 		});
 		window.grabFunc=function(things){
+				var result="";
 				for (thing in things){
+						result+=window.template2({value: things[thing]});
 						console.log(things[thing]);
 				}
+				return result;
 		}
 		window.thing=new Item();
-		window.template=$('#master_tmpl').html();
-		window.template2=$('#value_tmpl');
+		window.template=_.template($('#master_tmpl').html());
+		window.template2=_.template($('#value_tmpl').html());
 		var MasterView=Backbone.View.extend({
 				el:('#titleDiv'),
 				initialize: function(){
@@ -42,7 +45,7 @@
 						this.render();
 				},
 				render: function(){
-						$(this.el).html(_.template(window.template, window.thing.toJSON()));
+						$(this.el).html(window.template(window.thing.toJSON()));
 						return this;
 				}
 		});
